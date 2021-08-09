@@ -97,7 +97,8 @@ public class Semantics {
 
     State M (Switch sw, State state) {
         if (M(sw.test, state).boolValue( )) {
-            		return M (sw.casebranch, state);
+            		return M (sw.casebranch1, state);
+                   
 		} else {
             		return M (sw.defaultbranch, state);
 		}

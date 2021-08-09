@@ -340,7 +340,7 @@ public class StaticTypeCheck {
 	if (s instanceof Switch) {
 	    Switch sw = (Switch) s;
 	    V(sw.test, tm);
-	    V(sw.casebranch, tm);
+	    V(sw.casebranch1, tm);
 	    V(sw.defaultbranch, tm);
 	    Type ttype = typeOf(sw.test, tm);
 	    check( ttype == Type.BOOL, "test expression not of type bool: " + sw.test);

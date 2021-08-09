@@ -156,13 +156,17 @@ class Program {
 			String index = spcing + spc + "id: " + a_node.id + "\n";
 			String contents = inner_display(spc, spc + spcing, a_node.index);
 			return prefix + index + contents;
+
         } if (node instanceof Switch) { //similar to Conditional, above... implements "switch" control structure
             Switch switch_node = (Switch) node;
-            String prefix = spcing + "Switch:\n";
             String test = inner_display(spc, spc + spcing, switch_node.test);
-            String case_branch = spcing + "case:\n" + inner_display(spc, spc + spcing, switch_node.casebranch);
-            String default_branch = spcing +  "default:\n " + inner_display(spc, spc + spcing, switch_node.defaultbranch);
-            return prefix + test + case_branch + default_branch;
+            String prefix = spcing + "switch (" + switch_node.test + ") {\n";
+            String case_branch1 = spc + spcing + "case 'x" + "':\n" + inner_display(spc, spc + spc + spcing, switch_node.casebranch1);
+            String case_branch2 = spc + spcing + "case 'y" + "':\n" + inner_display(spc, spc + spc + spcing, switch_node.casebranch2);
+            String case_branch3 = spc + spcing + "case 'z" + "':\n" + inner_display(spc, spc + spc + spcing, switch_node.casebranch3);
+            String default_branch = spc +spcing +  "default:\n " + inner_display(spc, spc + spc + spcing, switch_node.defaultbranch) + spc +spcing + "}\n";
+            return prefix + test + case_branch1 + case_branch2 + case_branch3 + default_branch;
+
 		} if (node instanceof Print) {
 			Print p_node = (Print) node;
 			String prefix = spcing + "Print:\n";
@@ -367,22 +371,22 @@ class Conditional extends Statement {
 class Switch extends Statement {
     // Switch = Expression test; Statement casebranch, defaultbranch
         Expression test;
-        Statement casebranch, defaultbranch;
+        Statement casebranch1, casebranch2, casebranch3, defaultbranch;
         
         Switch (Expression t, Statement tp) {
-            test = t; casebranch = tp; defaultbranch = new Skip( );
+            test = t; casebranch1 = tp; casebranch2 = tp; casebranch3 = tp; defaultbranch = new Skip( );
         }
         
         Switch (Expression t, Statement tp, Statement ep) {
-            test = t; casebranch = tp; defaultbranch = ep;
+            test = t; casebranch1 = tp; casebranch2 = tp; casebranch3 = tp; defaultbranch = ep;
         }
     
         boolean hasReturn() {
-            return (casebranch.hasReturn() || defaultbranch.hasReturn());
+            return (casebranch1.hasReturn() || casebranch2.hasReturn() || casebranch3.hasReturn() || defaultbranch.hasReturn());
         }
     
         boolean mustReturn() {
-            return (casebranch.hasReturn() && defaultbranch.hasReturn());
+            return (casebranch1.hasReturn() && casebranch2.hasReturn() && casebranch3.hasReturn() && defaultbranch.hasReturn());
         }
     
         /*

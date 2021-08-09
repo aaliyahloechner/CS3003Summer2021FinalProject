@@ -144,7 +144,7 @@ public class TypeTransformer {
 		if (s instanceof Switch) {
             Switch sw = (Switch)s;
             Expression test = T (sw.test, tm);
-            Statement tbr = T (sw.casebranch, tm);
+            Statement tbr = T (sw.casebranch1, tm);
             Statement ebr = T (sw.defaultbranch, tm);
             return new Switch(test,  tbr, ebr);
         }
