@@ -193,8 +193,8 @@ public class Parser {
     }
   
     private Statement statement() {
-        // Statement --> ; | Block | Assignment | IfStatement | WhileStatement | CallStatement | ReturnStatement | Print
-        // Statement --> ; | Block | Assignment | IfStatement | WhileStatement | Print
+        // Statement --> ; | Block | Assignment | IfStatement | WhileStatement | SwitchStatement | CallStatement | ReturnStatement | Print
+        // Statement --> ; | Block | Assignment | IfStatement | WhileStatement | SwitchStatement | Print
         Statement s = new Skip();
 	if (token.type().equals(TokenType.LeftBrace)) {
 		match(TokenType.LeftBrace);
@@ -211,6 +211,8 @@ public class Parser {
 		s = ifStatement();
 	} else if (token.type().equals(TokenType.While)) {
 		s = whileStatement();
+	} else if (token.type().equals(TokenType.Switch)) {
+		s = switchStatement();
 	} else if (token.type().equals(TokenType.Return)) {
 		s = returnStatement();
 		match(TokenType.Semicolon);
@@ -275,8 +277,23 @@ public class Parser {
         return new Conditional(test, tp);  // student exercise
     }
   
+	private Switch switchStatement () {
+		//SwitchStatement --> case ( Expression ) Statement [ default Statement ]
+	match(token.type());
+	match(TokenType.LeftParen);
+	Expression test = expression();
+	match(TokenType.RightParen);
+	Statement tp = statement();
+	if (token.type().equals(TokenType.Switch)) {
+		match(token.type());
+		Statement ep = statement();
+		return new Switch(test, tp, ep);
+	}
+        return new Switch(test, tp);
+    }
+
     private Loop whileStatement () {
-        // WhileStatement --> while ( Expression ) Statement
+    	// WhileStatement --> while ( Expression ) Statement
 	match(token.type());
 	match(TokenType.LeftParen);
 	Expression test = expression();
@@ -292,7 +309,7 @@ public class Parser {
     }
 
     private Print print() {
-	// Print --> print ( Expression )
+		// Print --> print ( Expression )
 	match(token.type());
 	match(TokenType.LeftParen);
 	Expression to_print = expression();
