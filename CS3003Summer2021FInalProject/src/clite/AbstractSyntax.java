@@ -96,6 +96,12 @@ class Program {
 			String test = inner_display(spc, spc + spcing, l_node.test);
 			String body = inner_display(spc, spc + spcing, l_node.body); 	
 			return prefix + test + body;
+        } if (node instanceof DoWhile) {
+			DoWhile dw_node = (DoWhile) node;
+			String prefix = spcing + "Do while:\n";
+			String body = inner_display(spc, spc + spcing, dw_node.body); 	
+            String test = inner_display(spc, spc + spcing, dw_node.test);
+			return prefix + body + test;
 		} if (node instanceof Functions) {
 			Functions f_node = (Functions) node;
 			String prefix = spcing + "Functions:\n";
@@ -156,14 +162,7 @@ class Program {
 			String index = spcing + spc + "id: " + a_node.id + "\n";
 			String contents = inner_display(spc, spc + spcing, a_node.index);
 			return prefix + index + contents;
-        } if (node instanceof Switch) { //similar to Conditional, above... implements "switch" control structure
-            Switch switch_node = (Switch) node;
-            String prefix = spcing + "switch (" + switch_node.test +"):\n";
-            String test = inner_display(spc, spc + spcing, switch_node.test);
-            String case_branch = spc + spcing + "case 'x':\n" + inner_display(spc, spc + spc + spcing, switch_node.casebranch);
-            String default_branch = spc + spcing +  "default:\n " + inner_display(spc, spc + spc + spcing, switch_node.defaultbranch);
-            return prefix + test + case_branch + default_branch;
-		} if (node instanceof Print) {
+        } if (node instanceof Print) {
 			Print p_node = (Print) node;
 			String prefix = spcing + "Print:\n";
 			String expr = inner_display(spc, spc + spcing, p_node.to_print);
@@ -288,7 +287,7 @@ class Type {
 }
 
 abstract class Statement {
-    // Statement = Skip | Block | Assignment | Conditional | Loop | Call | Return
+    // Statement = Skip | Block | Assignment | Conditional | Loop | DoWhile | Call | Return
 
 	boolean hasReturn() {
 		return false;
@@ -365,36 +364,7 @@ class Conditional extends Statement {
 	*/
 }
 
-class Switch extends Statement {
-    // Switch = Expression test; Statement casebranch, defaultbranch
-        Expression test;
-        Statement casebranch, defaultbranch;
-        
-        Switch (Expression t, Statement tp) {
-            test = t; casebranch = tp; defaultbranch = new Skip( );
-        }
-        
-        Switch (Expression t, Statement tp, Statement ep) {
-            test = t; casebranch = tp; defaultbranch = ep;
-        }
-    
-        boolean hasReturn() {
-            return (casebranch.hasReturn() || defaultbranch.hasReturn());
-        }
-    
-        boolean mustReturn() {
-            return (casebranch.hasReturn() && defaultbranch.hasReturn());
-        }
-    
-        /*
-        public void display() {
-            System.out.println("Switch: ");
-            System.out.print("\t"); test.display();
-            System.out.println("\t"); casebranch.display();	
-            System.out.println("\t"); defaultbranch.display();
-           } 
-        */
-    }
+
 
 class Loop extends Statement {
 // Loop = Expression test; Statement body
@@ -410,6 +380,21 @@ class Loop extends Statement {
 	}	
     
 }
+
+class DoWhile extends Statement {
+    // DoWhile = Statement body; Expression test
+        Statement body;
+        Expression test;
+    
+        DoWhile (Statement b, Expression t) {
+            body = b; test = t;
+        }
+    
+        boolean hasReturn() {
+            return body.hasReturn();
+        }	
+        
+    }
 
 class CallStatement extends Statement {
 	String name;

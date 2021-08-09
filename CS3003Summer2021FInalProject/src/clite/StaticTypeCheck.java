@@ -331,19 +331,18 @@ public class StaticTypeCheck {
 	    check(ttype == Type.BOOL, "test expression not of type bool: " + l.test);	
 	    return;
 	}
+	if (s instanceof DoWhile) {
+	    DoWhile dw = (DoWhile) s;
+	    V(dw.test, tm);
+	    V(dw.body, tm);
+	    Type ttype = typeOf(dw.test, tm);
+	    check(ttype == Type.BOOL, "test expression not of type bool: " + dw.test);	
+	    return;
+	}
 	if (s instanceof Block) {
 	    Block b = (Block) s;
 	    for (int i=0; i<b.members.size(); i++)
 		V(b.members.get(i), tm);
-	    return;
-	}
-	if (s instanceof Switch) {
-	    Switch sw = (Switch) s;
-	    V(sw.test, tm);
-	    V(sw.casebranch, tm);
-	    V(sw.defaultbranch, tm);
-	    Type ttype = typeOf(sw.test, tm);
-	    check( ttype == Type.BOOL, "test expression not of type bool: " + sw.test);
 	    return;
 	}
 	if (s instanceof CallStatement) {

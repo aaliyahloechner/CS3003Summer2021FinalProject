@@ -134,6 +134,12 @@ public class TypeTransformer {
             Statement body = T (l.body, tm);
             return new Loop(test, body);
         }
+        if (s instanceof DoWhile) {
+            DoWhile dw = (DoWhile)s;
+            Expression test = T (dw.test, tm);
+            Statement body = T (dw.body, tm);
+            return new DoWhile(body, test);
+        }
         if (s instanceof Block) {
             Block b = (Block)s;
             Block out = new Block();
@@ -141,13 +147,7 @@ public class TypeTransformer {
                 out.members.add(T(stmt, tm));
             return out;
         }
-		if (s instanceof Switch) {
-            Switch sw = (Switch)s;
-            Expression test = T (sw.test, tm);
-            Statement tbr = T (sw.casebranch, tm);
-            Statement ebr = T (sw.defaultbranch, tm);
-            return new Switch(test,  tbr, ebr);
-        }
+		
 	if (s instanceof Return) {
 		Return r = (Return) s;	
 		return new Return(r.target, T(r.result, tm));
