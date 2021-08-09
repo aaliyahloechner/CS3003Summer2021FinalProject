@@ -96,6 +96,12 @@ class Program {
 			String test = inner_display(spc, spc + spcing, l_node.test);
 			String body = inner_display(spc, spc + spcing, l_node.body); 	
 			return prefix + test + body;
+        } if (node instanceof DoWhile) {
+			DoWhile dw_node = (DoWhile) node;
+			String prefix = spcing + "Do while:\n";
+			String body = inner_display(spc, spc + spcing, dw_node.body); 	
+            String test = inner_display(spc, spc + spcing, dw_node.test);
+			return prefix + body + test;
 		} if (node instanceof Functions) {
 			Functions f_node = (Functions) node;
 			String prefix = spcing + "Functions:\n";
@@ -288,7 +294,7 @@ class Type {
 }
 
 abstract class Statement {
-    // Statement = Skip | Block | Assignment | Conditional | Loop | Call | Return
+    // Statement = Skip | Block | Assignment | Conditional | Loop | DoWhile | Call | Return
 
 	boolean hasReturn() {
 		return false;
@@ -410,6 +416,21 @@ class Loop extends Statement {
 	}	
     
 }
+
+class DoWhile extends Statement {
+    // DoWhile = Statement body; Expression test
+        Statement body;
+        Expression test;
+    
+        DoWhile (Statement b, Expression t) {
+            body = b; test = t;
+        }
+    
+        boolean hasReturn() {
+            return body.hasReturn();
+        }	
+        
+    }
 
 class CallStatement extends Statement {
 	String name;

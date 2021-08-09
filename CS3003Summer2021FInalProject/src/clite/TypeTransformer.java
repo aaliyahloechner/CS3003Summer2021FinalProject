@@ -134,6 +134,12 @@ public class TypeTransformer {
             Statement body = T (l.body, tm);
             return new Loop(test, body);
         }
+        if (s instanceof DoWhile) {
+            DoWhile dw = (DoWhile)s;
+            Expression test = T (dw.test, tm);
+            Statement body = T (dw.body, tm);
+            return new DoWhile(body, test);
+        }
         if (s instanceof Block) {
             Block b = (Block)s;
             Block out = new Block();

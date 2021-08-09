@@ -49,6 +49,7 @@ public class Semantics {
         if (s instanceof Assignment)  return M((Assignment)s, state);
         if (s instanceof Conditional)  return M((Conditional)s, state);
         if (s instanceof Loop)  return M((Loop)s, state);
+        if (s instanceof DoWhile)  return M((DoWhile)s, state);
         if (s instanceof Block)  return M((Block)s, state);
         if (s instanceof Switch)  return M((Switch)s, state);
 	if (s instanceof CallStatement) return M((CallStatement)s, state);
@@ -92,6 +93,12 @@ public class Semantics {
     State M (Loop l, State state) {
         if (M (l.test, state).boolValue( ) && !saw_ret)
             return M(l, M (l.body, state));
+        else return state;
+    }
+
+    State M (DoWhile dw, State state) {
+        if (M (dw.test, state).boolValue( ) && !saw_ret)
+            return M(dw, M (dw.body, state));
         else return state;
     }
 

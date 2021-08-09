@@ -5,4 +5,6 @@ int main() {
     big j;
     j=56;
     switch ('A')  x = 86;
+    while (2) x = 57;
+    doWhile (2) y = 12;
 } // main
