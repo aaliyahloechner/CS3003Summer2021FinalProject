@@ -147,13 +147,7 @@ public class TypeTransformer {
                 out.members.add(T(stmt, tm));
             return out;
         }
-		if (s instanceof Switch) {
-            Switch sw = (Switch)s;
-            Expression test = T (sw.test, tm);
-            Statement tbr = T (sw.casebranch, tm);
-            Statement ebr = T (sw.defaultbranch, tm);
-            return new Switch(test,  tbr, ebr);
-        }
+		
 	if (s instanceof Return) {
 		Return r = (Return) s;	
 		return new Return(r.target, T(r.result, tm));
