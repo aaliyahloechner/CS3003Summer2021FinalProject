@@ -331,6 +331,14 @@ public class StaticTypeCheck {
 	    check(ttype == Type.BOOL, "test expression not of type bool: " + l.test);	
 	    return;
 	}
+	if (s instanceof DoWhile) {
+	    DoWhile dw = (DoWhile) s;
+	    V(dw.test, tm);
+	    V(dw.body, tm);
+	    Type ttype = typeOf(dw.test, tm);
+	    check(ttype == Type.BOOL, "test expression not of type bool: " + dw.test);	
+	    return;
+	}
 	if (s instanceof Block) {
 	    Block b = (Block) s;
 	    for (int i=0; i<b.members.size(); i++)

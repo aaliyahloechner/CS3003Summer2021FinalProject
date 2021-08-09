@@ -142,6 +142,9 @@ public class CodeGen {
         } if (s instanceof Loop) { 
 			M((Loop)s, symtable, jfile);
 			return;
+		} if (s instanceof DoWhile) { 
+			M((DoWhile)s, symtable, jfile);
+			return;
         } if (s instanceof Block) { 
 			M((Block)s, symtable, jfile);
 			return;
@@ -297,7 +300,29 @@ public class CodeGen {
 	jfile.writeln("LOOPEXIT" + current_branch_cnt + ":");
 	
     }
+    void M (DoWhile dw, SymbolTable symtable, JasminFile jfile) throws IOException {
+		// translate the conditional
+		//		translate the body
 
+	int current_branch_cnt = branch_cnt;
+	branch_cnt++;
+
+	jfile.writeln();
+
+	jfile.writeln("LOOPTEST" + current_branch_cnt + ":");
+	M(dw.test, symtable, jfile);
+	
+	jfile.writeln();
+	jfile.writeln("ifne LOOPBODY" + current_branch_cnt);
+	jfile.writeln("goto LOOPEXIT" + current_branch_cnt); 
+
+	jfile.writeln("LOOPBODY" + current_branch_cnt + ":");
+	M(dw.body, symtable, jfile);
+	jfile.writeln("goto LOOPTEST" + current_branch_cnt);
+
+	jfile.writeln("LOOPEXIT" + current_branch_cnt + ":");
+	
+    }
     void M (Print p, SymbolTable symtable, JasminFile jfile) throws IOException {
 	jfile.writeln("getstatic java/lang/System/out Ljava/io/PrintStream;");
 
